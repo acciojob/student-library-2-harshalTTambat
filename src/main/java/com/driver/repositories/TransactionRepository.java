@@ -1,6 +1,6 @@
 package com.driver.repositories;
 
-import com.driver.models.TransactionStatus;
+import com.driver.Enums.TransactionStatus;
 import com.driver.models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

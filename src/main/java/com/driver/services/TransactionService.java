@@ -1,7 +1,10 @@
 package com.driver.services;
 
+import com.driver.Enums.CardStatus;
+import com.driver.models.Book;
+import com.driver.models.Card;
 import com.driver.models.Transaction;
-import com.driver.models.TransactionStatus;
+import com.driver.Enums.TransactionStatus;
 import com.driver.repositories.BookRepository;
 import com.driver.repositories.CardRepository;
 import com.driver.repositories.TransactionRepository;
@@ -9,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,24 +39,55 @@ public class TransactionService {
 
     public String issueBook(int cardId, int bookId) throws Exception {
         //check whether bookId and cardId already exist
-        //conditions required for successful transaction of issue book:
-        //1. book is present and available
-        // If it fails: throw new Exception("Book is either unavailable or not present");
-        //2. card is present and activated
-        // If it fails: throw new Exception("Card is invalid");
-        //3. number of books issued against the card is strictly less than max_allowed_books
-        // If it fails: throw new Exception("Book limit has reached for this card");
-        //If the transaction is successful, save the transaction to the list of transactions and return the id
+        Card card = cardRepository5.findById(cardId).get();
+        Book book = bookRepository5.findById(bookId).get();
+        String transactionId;
+        if (book != null && card != null)
+        {
+            //conditions required for successful transaction of issue book:
+            //1. book is present and available
+            //2. card is present and activated
+            CardStatus cardStatus = card.getCardStatus();
+            if (book.isAvailable()==true && cardStatus.equals("ACTIVATED"))
+            {
+                //3. number of books issued against the card is strictly less than max_allowed_books
+                List<Book> bookList = card.getBooks();
+                if(bookList.size() < max_allowed_books)
+                {
+                    // If the transaction is successful,
+                    Transaction transaction = new Transaction();
+                    transaction.setCard(card);
+                    transaction.setBook(book);
+                    transaction.setIssueOperation(true);
+                    transaction.setTransactionStatus(TransactionStatus.SUCCESSFUL);
 
-        //Note that the error message should match exactly in all cases
+                    // save the transaction to the list of transactions and return the id
+                    List<Transaction> transactionList = book.getTransactions();
+                    transactionList.add(transaction);
+                    book.setTransactions(transactionList);
 
-       return null; //return transactionId instead
+                    transactionRepository5.save(transaction);
+                    transactionId = transaction.getTransactionId();
+                }
+                // If it fails:
+                else throw new Exception("Book limit has reached for this card");
+            }
+            // If it fails:
+            else throw new Exception("Card is invalid");
+        }
+        // If it fails:
+        else throw new Exception("Book is either unavailable or not present");
+
+        bookRepository5.save(book);
+        return transactionId;
     }
 
     public Transaction returnBook(int cardId, int bookId) throws Exception{
 
         List<Transaction> transactions = transactionRepository5.find(cardId, bookId, TransactionStatus.SUCCESSFUL, true);
         Transaction transaction = transactions.get(transactions.size() - 1);
+
+        Date date = transaction.getTransactionDate();
 
         //for the given transaction calculate the fine amount considering the book has been returned exactly when this function is called
         //make the book available for other users
