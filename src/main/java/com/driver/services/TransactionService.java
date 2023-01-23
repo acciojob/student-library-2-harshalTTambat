@@ -52,10 +52,10 @@ public class TransactionService {
             {
                 //3. number of books issued against the card is strictly less than max_allowed_books
                 List<Book> bookList = card.getBooks();
+                Transaction transaction = new Transaction();
                 if(bookList.size() < max_allowed_books)
                 {
                     // If the transaction is successful,
-                    Transaction transaction = new Transaction();
                     transaction.setCard(card);
                     transaction.setBook(book);
                     transaction.setIssueOperation(true);
@@ -70,7 +70,11 @@ public class TransactionService {
                     transactionId = transaction.getTransactionId();
                 }
                 // If it fails:
-                else throw new Exception("Book limit has reached for this card");
+                else {
+                    transaction.setTransactionStatus(TransactionStatus.FAILED);
+                    throw new Exception("Book limit has reached for this card");
+                }
+
             }
             // If it fails:
             else throw new Exception("Card is invalid");

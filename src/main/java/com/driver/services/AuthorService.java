@@ -13,14 +13,7 @@ public class AuthorService {
     AuthorRepository authorRepository1;
 
     public String create(Author author){
-        try
-        {
-            authorRepository1.save(author);
-        }
-        catch (Exception e)
-        {
-            return "sorry..can not create Author ";
-        }
+        authorRepository1.save(author);
         return "Author added successfully..";
     }
 }

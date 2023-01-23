@@ -16,12 +16,12 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @GetMapping("/getStudentByEmail/{email}")
+    @GetMapping("/getStudent/{email}")
     public ResponseEntity<String> getStudentByEmail(@RequestParam("email") String email){
         studentService.getDetailsByEmail(email);
         return new ResponseEntity<>("Student details printed successfully ", HttpStatus.OK);
     }
-
+    @GetMapping("/getStudent")
     public ResponseEntity<String> getStudentById(@RequestParam("id") int id){
         studentService.getDetailsById(id);
         return new ResponseEntity<>("Student details printed successfully ", HttpStatus.OK);
@@ -38,8 +38,7 @@ public class StudentController {
         studentService.updateStudent(student);
         return new ResponseEntity<>("student is updated", HttpStatus.ACCEPTED);
     }
-
-    //Add required annotations
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteStudent(@RequestParam("id") int id){
 
         studentService.deleteStudent(id);

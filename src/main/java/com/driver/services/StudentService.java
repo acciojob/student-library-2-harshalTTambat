@@ -2,6 +2,7 @@ package com.driver.services;
 
 import com.driver.models.Card;
 import com.driver.models.Student;
+import com.driver.repositories.CardRepository;
 import com.driver.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

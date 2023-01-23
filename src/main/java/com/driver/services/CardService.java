@@ -5,6 +5,7 @@ import com.driver.models.Student;
 import com.driver.models.Card;
 import com.driver.Enums.CardStatus;
 import com.driver.repositories.CardRepository;
+import com.driver.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class CardService {
     @Autowired
     CardRepository cardRepository3;
+    @Autowired
+    StudentRepository studentRepository;
 
     public Card createAndReturn(Student student){
         Card card = new Card();
@@ -28,5 +31,8 @@ public class CardService {
 
     public void deactivateCard(int student_id){
         cardRepository3.deactivateCard(student_id, CardStatus.DEACTIVATED.toString());
+        Student student = studentRepository.findById(student_id).get();
+        Card card = student.getCard();
+        cardRepository3.delete(card);
     }
 }
