@@ -12,7 +12,15 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository1;
 
-    public void create(Author author){
-        authorRepository1.save(author);
+    public String create(Author author){
+        try
+        {
+            authorRepository1.save(author);
+        }
+        catch (Exception e)
+        {
+            return "sorry..can not create Author ";
+        }
+        return "Author added successfully..";
     }
 }

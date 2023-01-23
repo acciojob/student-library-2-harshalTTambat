@@ -1,6 +1,7 @@
 package com.driver.controller;
 
 import com.driver.models.Student;
+import com.driver.repositories.StudentRepository;
 import com.driver.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,27 +15,24 @@ public class StudentController {
 
     @Autowired
     StudentService studentService;
-    //Add required annotations
+
     @GetMapping("/getStudentByEmail/{email}")
     public ResponseEntity<String> getStudentByEmail(@RequestParam("email") String email){
-
+        studentService.getDetailsByEmail(email);
         return new ResponseEntity<>("Student details printed successfully ", HttpStatus.OK);
     }
 
-    //Add required annotations
-    public ResponseEntity getStudentById(@RequestParam("id") int id){
-
+    public ResponseEntity<String> getStudentById(@RequestParam("id") int id){
+        studentService.getDetailsById(id);
         return new ResponseEntity<>("Student details printed successfully ", HttpStatus.OK);
     }
 
-    //Add required annotations
     @PostMapping("/createStudent")
     public ResponseEntity<String> createStudent(@RequestBody Student student){
         studentService.createStudent(student);
         return new ResponseEntity<>("the student is successfully added to the system", HttpStatus.CREATED);
     }
 
-    //Add required annotations
     @PutMapping("/updateStudent")
     public ResponseEntity<String> updateStudent(@RequestBody Student student){
         studentService.updateStudent(student);
@@ -42,8 +40,9 @@ public class StudentController {
     }
 
     //Add required annotations
-    public ResponseEntity deleteStudent(@RequestParam("id") int id){
+    public ResponseEntity<String> deleteStudent(@RequestParam("id") int id){
 
+        studentService.deleteStudent(id);
         return new ResponseEntity<>("student is deleted", HttpStatus.ACCEPTED);
     }
 

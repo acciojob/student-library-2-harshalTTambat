@@ -22,7 +22,7 @@ public class AuthorController {
     @PostMapping("/createAuthor")
     public ResponseEntity<String> createAuthor(@RequestBody Author author)
     {
-        authorService.create(author);
-        return new ResponseEntity<>("Author added successfully", HttpStatus.CREATED);
+        String result = authorService.create(author);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 }

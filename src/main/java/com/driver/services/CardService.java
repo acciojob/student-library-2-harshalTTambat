@@ -8,12 +8,11 @@ import com.driver.repositories.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CardService {
-
-
     @Autowired
     CardRepository cardRepository3;
 
@@ -22,7 +21,8 @@ public class CardService {
         card.setCardStatus(CardStatus.ACTIVATED);
         //link student with a new card
         card.setStudent(student);
-        cardRepository3.save(card);
+        List<Book> bookList = new ArrayList<>();
+        card.setBooks(bookList);
         return card;
     }
 

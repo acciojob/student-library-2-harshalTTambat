@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StudentService {
-
-
     @Autowired
     CardService cardService4;
 
@@ -17,15 +15,12 @@ public class StudentService {
     StudentRepository studentRepository4;
 
     public Student getDetailsByEmail(String email){
-        Student student = null;
-
-        return student;
+        return studentRepository4.findByEmailId(email);
     }
 
     public Student getDetailsById(int id){
-        Student student = null;
+        return studentRepository4.findById(id).get();
 
-        return student;
     }
 
     public void createStudent(Student student){
@@ -35,16 +30,14 @@ public class StudentService {
     }
 
     public void updateStudent(Student student){
-        Student student1 = studentRepository4.findById(student.getId()).get();
-        student1.setAge(student.getAge());
-        student1.setEmailId(student.getEmailId());
-        student1.setCountry(student.getCountry());
-        student1.setName(student.getName());
-        student1.setCard(student.getCard());
-        studentRepository4.save(student1);
+        int studentId = studentRepository4.updateStudentDetails(student);
+        Student s = studentRepository4.findById(studentId).get();
+        studentRepository4.save(s);
     }
 
     public void deleteStudent(int id){
         //Delete student and deactivate corresponding card
+        cardService4.deactivateCard(id);
+        studentRepository4.deleteById(id);
     }
 }
