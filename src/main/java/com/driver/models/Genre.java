@@ -1,4 +1,4 @@
-package com.driver.Enums;
+package com.driver.models;
 
 public enum Genre {
     FICTIONAL,

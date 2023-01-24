@@ -1,10 +1,10 @@
 package com.driver.services;
 
-import com.driver.Enums.CardStatus;
+import com.driver.models.CardStatus;
 import com.driver.models.Book;
 import com.driver.models.Card;
 import com.driver.models.Transaction;
-import com.driver.Enums.TransactionStatus;
+import com.driver.models.TransactionStatus;
 import com.driver.repositories.BookRepository;
 import com.driver.repositories.CardRepository;
 import com.driver.repositories.TransactionRepository;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

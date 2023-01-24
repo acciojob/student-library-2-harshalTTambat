@@ -1,6 +1,6 @@
 package com.driver.repositories;
 
-import com.driver.Enums.Genre;
+import com.driver.models.Genre;
 import com.driver.models.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

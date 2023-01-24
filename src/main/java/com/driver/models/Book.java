@@ -1,7 +1,6 @@
 package com.driver.models;
 
 
-import com.driver.Enums.Genre;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;

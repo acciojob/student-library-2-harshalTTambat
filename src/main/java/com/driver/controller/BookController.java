@@ -1,6 +1,6 @@
 package com.driver.controller;
 
-import com.driver.Enums.Genre;
+import com.driver.models.Genre;
 import com.driver.models.Book;
 import com.driver.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
