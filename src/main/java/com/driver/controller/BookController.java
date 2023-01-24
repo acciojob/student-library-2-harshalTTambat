@@ -18,7 +18,7 @@ public class BookController {
     BookService bookService;
 
     @PostMapping("/createBook")
-    public ResponseEntity<String> createBook(@RequestBody Book book)
+    public ResponseEntity createBook(@RequestBody Book book)
     {
         bookService.createBook(book);
         return new ResponseEntity<>("successfully created book",HttpStatus.CREATED);
@@ -28,7 +28,8 @@ public class BookController {
                                    @RequestParam(value = "available", required = false, defaultValue = "false") boolean available,
                                    @RequestParam(value = "author", required = false) String author){
 
-        List<Book> bookList = bookService.getBooks(genre,available,author);
+        List<Book> bookList = bookService.getBooks(genre, available, author);
+
         return new ResponseEntity<>(bookList, HttpStatus.OK);
 
     }
