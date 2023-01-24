@@ -24,15 +24,13 @@ public class CardService {
         card.setCardStatus(CardStatus.ACTIVATED);
         //link student with a new card
         card.setStudent(student);
-        List<Book> bookList = new ArrayList<>();
-        card.setBooks(bookList);
+        student.setCard(card);
+
+        cardRepository3.save(card);
         return card;
     }
 
     public void deactivateCard(int student_id){
         cardRepository3.deactivateCard(student_id, CardStatus.DEACTIVATED.toString());
-        Student student = studentRepository.findById(student_id).get();
-        Card card = student.getCard();
-        cardRepository3.delete(card);
     }
 }

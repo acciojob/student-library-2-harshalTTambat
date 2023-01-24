@@ -31,14 +31,12 @@ public class StudentService {
     }
 
     public void updateStudent(Student student){
-        int studentId = studentRepository4.updateStudentDetails(student);
-        Student s = studentRepository4.findById(studentId).get();
-        studentRepository4.save(s);
+        studentRepository4.updateStudentDetails(student);
     }
 
     public void deleteStudent(int id){
         //Delete student and deactivate corresponding card
         cardService4.deactivateCard(id);
-        studentRepository4.deleteById(id);
+        studentRepository4.deleteCustom(id);
     }
 }

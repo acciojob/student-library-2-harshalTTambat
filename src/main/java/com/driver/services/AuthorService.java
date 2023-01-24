@@ -12,8 +12,7 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository1;
 
-    public String create(Author author){
+    public void create(Author author){
         authorRepository1.save(author);
-        return "Author added successfully..";
     }
 }
