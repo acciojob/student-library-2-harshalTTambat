@@ -20,27 +20,29 @@ import java.util.concurrent.TimeUnit;
 public class TransactionService {
 
     @Autowired
-    BookRepository bookRepository5;
+    BookRepository bookRepository;
 
     @Autowired
-    CardRepository cardRepository5;
+    CardRepository cardRepository;
 
     @Autowired
-    TransactionRepository transactionRepository5;
+    TransactionRepository transactionRepository;
 
     @Value("${books.max_allowed}")
-    public int max_allowed_books;
+    public
+    int max_allowed_books;
 
     @Value("${books.max_allowed_days}")
-    public int getMax_allowed_days;
+    public
+    int getMax_allowed_days;
 
     @Value("${books.fine.per_day}")
-    public int fine_per_day;
+    public
+    int fine_per_day;
 
     public String issueBook(int cardId, int bookId) throws Exception {
-        //check whether bookId and cardId already exist
-        Book book = bookRepository5.findById(bookId).get();
-        Card card = cardRepository5.findById(cardId).get();
+        Book book = bookRepository.findById(bookId).get();
+        Card card = cardRepository.findById(cardId).get();
 
         Transaction transaction = new Transaction();
 
@@ -48,21 +50,23 @@ public class TransactionService {
         transaction.setCard(card);
         transaction.setIssueOperation(true);
 
+        //Book should be available
         if(book == null || !book.isAvailable()){
             transaction.setTransactionStatus(TransactionStatus.FAILED);
-            transactionRepository5.save(transaction);
+            transactionRepository.save(transaction);
             throw new Exception("Book is either unavailable or not present");
         }
 
+        //Card is unavaible or its deactivated
         if(card == null || card.getCardStatus().equals(CardStatus.DEACTIVATED)){
             transaction.setTransactionStatus(TransactionStatus.FAILED);
-            transactionRepository5.save(transaction);
+            transactionRepository.save(transaction);
             throw new Exception("Card is invalid");
         }
 
         if(card.getBooks().size() >= max_allowed_books){
             transaction.setTransactionStatus(TransactionStatus.FAILED);
-            transactionRepository5.save(transaction);
+            transactionRepository.save(transaction);
             throw new Exception("Book limit has reached for this card");
         }
 
@@ -72,18 +76,24 @@ public class TransactionService {
         bookList.add(book);
         card.setBooks(bookList);
 
-        bookRepository5.updateBook(book);
+        cardRepository.save(card);
+
+        bookRepository.updateBook(book);
 
         transaction.setTransactionStatus(TransactionStatus.SUCCESSFUL);
 
-        transactionRepository5.save(transaction);
+        transactionRepository.save(transaction);
+        //This saving of transcation can't be avoided bcz card is not bidirectionally connected to txn
+        //and for the book we are not calling the inbuilt .save function
+
+
 
         return transaction.getTransactionId();
     }
 
     public Transaction returnBook(int cardId, int bookId) throws Exception{
 
-        List<Transaction> transactions = transactionRepository5.find(cardId, bookId,TransactionStatus.SUCCESSFUL, true);
+        List<Transaction> transactions = transactionRepository.find(cardId, bookId,TransactionStatus.SUCCESSFUL, true);
 
         Transaction transaction = transactions.get(transactions.size() - 1);
 
@@ -103,11 +113,7 @@ public class TransactionService {
         book.setAvailable(true);
         book.setCard(null);
 
-
-
-        //Remve that book from that card list
-
-        bookRepository5.updateBook(book);
+        bookRepository.updateBook(book);
 
         Transaction tr = new Transaction();
         tr.setBook(transaction.getBook());
@@ -116,8 +122,8 @@ public class TransactionService {
         tr.setFineAmount(fine);
         tr.setTransactionStatus(TransactionStatus.SUCCESSFUL);
 
-        transactionRepository5.save(tr);
+        transactionRepository.save(tr);
 
-        return tr; //return the transaction after updating all details
+        return tr;
     }
 }
