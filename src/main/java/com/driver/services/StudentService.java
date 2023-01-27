@@ -15,30 +15,39 @@ public class StudentService {
     private static Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     @Autowired
-    CardService cardService;
+    CardService cardService4;
 
     @Autowired
-    StudentRepository studentRepository;
+    CardRepository cardRepository;
+
+    @Autowired
+    StudentRepository studentRepository4;
+
 
 
     public Student getDetailsByEmail(String email){
-        return studentRepository.findByEmailId(email);
+        Student student = studentRepository4.findByEmailId(email);
+
+        return student;
     }
 
     public Student getDetailsById(int id){
-        return studentRepository.findById(id).get();
+        Student student = studentRepository4.findById(id).get();
+
+        return student;
     }
 
     public void createStudent(Student student){
-        Card newCard = cardService.createAndReturn(student);
+        Card card=cardService4.createAndReturn(student);
     }
 
     public void updateStudent(Student student){
-        studentRepository.updateStudentDetails(student);
+        studentRepository4.updateStudentDetails(student);
     }
 
     public void deleteStudent(int id){
-        cardService.deactivateCard(id);
-        studentRepository.deleteCustom(id);
+        //Delete student and deactivate corresponding card
+        cardService4.deactivateCard(id);
+        studentRepository4.deleteCustom(id);
     }
 }

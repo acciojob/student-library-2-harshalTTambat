@@ -12,12 +12,10 @@ import org.springframework.stereotype.Service;
 public class CardService {
     @Autowired
     CardRepository cardRepository3;
-    @Autowired
-    StudentRepository studentRepository;
 
     public Card createAndReturn(Student student){
         Card card = new Card();
-        card.setCardStatus(CardStatus.ACTIVATED);
+        //card.setCardStatus(CardStatus.ACTIVATED);
         //link student with a new card
         card.setStudent(student);
         student.setCard(card);

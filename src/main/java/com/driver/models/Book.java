@@ -2,12 +2,17 @@ package com.driver.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 
+@Builder
+@AllArgsConstructor
 public class Book {
 
     @Id
@@ -18,6 +23,20 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     private Genre genre;
+
+    public Book(String name, Genre genre, Author author, Card card, boolean available) {
+        this.name = name;
+        this.genre = genre;
+        this.author = author;
+        this.card = card;
+        this.available = available;
+    }
+
+    public Book(String name, Genre genre, Author author) {
+        this.name = name;
+        this.genre = genre;
+        this.author = author;
+    }
 
     @ManyToOne
     @JoinColumn
@@ -35,15 +54,9 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("book")
-    private List<Transaction> transactions;
+    private List<Transaction> transactions=new ArrayList<>();
 
     public Book() {
-    }
-    public Book(String name, Genre genre, Author author) {
-        this.name = name;
-        this.genre = genre;
-        this.author = author;
-        this.available = true;
     }
 
     public int getId() {

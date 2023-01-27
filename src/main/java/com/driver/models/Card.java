@@ -1,15 +1,19 @@
 package com.driver.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "cards")
+@Builder
+@AllArgsConstructor
 public class Card {
 
     @Id
@@ -31,9 +35,16 @@ public class Card {
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("card")
-    private List<Book> books;
+    private List<Book> books=new ArrayList<>();
 
     public Card(){
+        this.cardStatus = CardStatus.ACTIVATED;
+    }
+
+    public Card(Student student, Date createdOn, Date updatedOn) {
+        this.student = student;
+        this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
         this.cardStatus = CardStatus.ACTIVATED;
     }
 
